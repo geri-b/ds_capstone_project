@@ -12,8 +12,10 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+SEED = 16784684
 
-def train_test_split_indices_stratified(y: np.ndarray, test_size: float = 0.2, seed: int = 0):
+
+def train_test_split_indices_stratified(y: np.ndarray, test_size: float = 0.2, seed: int = SEED):
     """
     Stratified train/test split to maintain class proportions in both sets.
     """
@@ -266,7 +268,7 @@ print("-" * 70)
 # -----------------------
 # Stratified train/test split
 # -----------------------
-train_idx, test_idx = train_test_split_indices_stratified(y, test_size=0.2, seed=0)
+train_idx, test_idx = train_test_split_indices_stratified(y, test_size=0.2, seed=SEED)
 X_train, X_test = X[train_idx], X[test_idx]
 y_train, y_test = y[train_idx], y[test_idx]
 
@@ -409,20 +411,20 @@ print("-" * 70)
 # ------------------------------------------------------------------------------
 # MODEL RESULTS:
 # ------------------------------------------------------------------------------
-# - AUC-ROC:     0.7982  (good discriminative ability)
-# - Accuracy:    0.7351  (73.5% correct predictions)
-# - Precision:   0.7145  (71.5% of predicted peppers are correct)
-# - Recall:      0.7883  (78.8% of actual peppers are detected)
-# - F1 Score:    0.7496
-# - Specificity: 0.6813  (68.1% of non-peppers correctly identified)
+# - AUC-ROC:     0.8121  (good discriminative ability)
+# - Accuracy:    0.7276  (72.8% correct predictions)
+# - Precision:   0.7138  (71.4% of predicted peppers are correct)
+# - Recall:      0.7650  (76.5% of actual peppers are detected)
+# - F1 Score:    0.7385
+# - Specificity: 0.6897  (69.0% of non-peppers correctly identified)
 #
 # Confusion Matrix:
 #                      Predicted
 #                   No Pepper  Pepper
-# Actual No Pepper     404      189
-# Actual Pepper        127      473
+# Actual No Pepper     409      184
+# Actual Pepper        141      459
 #
-# The model has good overall performance with AUC-ROC ~0.80, indicating it can
+# The model has good overall performance with AUC-ROC ~0.81, indicating it can
 # distinguish between professors who receive a pepper vs those who don't
 # reasonably well.
 #
@@ -448,16 +450,16 @@ print("-" * 70)
 # ------------------------------------------------------------------------------
 # MOST PREDICTIVE FEATURES (Top 10 by |coefficient|):
 # ------------------------------------------------------------------------------
-#   1. avg_rating:        +1.16  (higher ratings -> more likely pepper)
-#   2. amazing_lectures:  +0.37  (amazing lectures -> more pepper)
-#   3. inspirational:     +0.33  (inspirational -> more pepper)
-#   4. avg_difficulty:    +0.24  (harder courses -> more pepper?*)
-#   5. male_prof:         -0.18  (male profs less likely to get pepper)
-#   6. caring:            +0.15  (caring -> more pepper)
-#   7. would_take_again:  +0.14  (positive student sentiment -> pepper)
-#   8. num_ratings:       -0.13  (more ratings -> less pepper?*)
-#   9. group_projects:    -0.12  (group projects -> less pepper)
-#  10. hilarious:         +0.12  (humor -> more pepper)
+#   1. avg_rating:        +1.10  (higher ratings -> more likely pepper)
+#   2. amazing_lectures:  +0.38  (amazing lectures -> more pepper)
+#   3. inspirational:     +0.35  (inspirational -> more pepper)
+#   4. avg_difficulty:    +0.21  (harder courses -> more pepper?*)
+#   5. would_take_again:  +0.21  (positive student sentiment -> pepper)
+#   6. male_prof:         -0.18  (male profs less likely to get pepper)
+#   7. group_projects:    -0.15  (group projects -> less pepper)
+#   8. lots_homework:     -0.13  (lots homework -> less pepper)
+#   9. lecture_heavy:     -0.09  (lecture heavy -> less pepper)
+#  10. caring:            +0.08  (caring -> more pepper)
 #
 # *Note: Some effects may be confounded. The difficulty effect might reflect
 # that charismatic professors can maintain high engagement even in harder courses.

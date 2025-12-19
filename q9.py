@@ -12,8 +12,10 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+SEED = 16784684
 
-def train_test_split_indices(n: int, test_size: float = 0.2, seed: int = 0):
+
+def train_test_split_indices(n: int, test_size: float = 0.2, seed: int = SEED):
     rng = np.random.default_rng(seed)
     idx = rng.permutation(n)
     n_test = int(round(n * test_size))
@@ -151,7 +153,7 @@ print("-" * 70)
 # -----------------------
 # Train/test split + Ridge fit
 # -----------------------
-train_idx, test_idx = train_test_split_indices(len(y), test_size=0.2, seed=0)
+train_idx, test_idx = train_test_split_indices(len(y), test_size=0.2, seed=SEED)
 X_train, X_test = X[train_idx], X[test_idx]
 y_train, y_test = y[train_idx], y[test_idx]
 
@@ -218,20 +220,20 @@ print(f"Most strongly predictive tag (by |standardized beta|): {top['feature']}"
 # ------------------------------------------------------------------------------
 # MODEL RESULTS:
 # ------------------------------------------------------------------------------
-# - Test R^2:  0.3035  (model explains ~30% of variance in avg_difficulty)
-# - Test RMSE: 0.6534  (average prediction error of ~0.65 points on 1-5 scale)
+# - Test R^2:  0.4261  (model explains ~43% of variance in avg_difficulty)
+# - Test RMSE: 0.5831  (average prediction error of ~0.58 points on 1-5 scale)
 #
 # ------------------------------------------------------------------------------
 # MOST STRONGLY PREDICTIVE TAG:
 # ------------------------------------------------------------------------------
-# "tough_grader" is the most strongly predictive tag (std beta = +0.4524).
+# "tough_grader" is the most strongly predictive tag (std beta = +0.4688).
 #
 # Top 5 most predictive tags (by |standardized beta|):
-#   1. tough_grader:       0.4524  (positive: tough graders = higher difficulty)
-#   2. accessible:         0.1865  (positive: accessible profs rated as harder?*)
-#   3. clear_grading:     -0.1576  (negative: clear grading = lower difficulty)
-#   4. caring:            -0.1410  (negative: caring = lower perceived difficulty)
-#   5. hilarious:         -0.0960  (negative: humor = lower perceived difficulty)
+#   1. tough_grader:       0.4688  (positive: tough graders = higher difficulty)
+#   2. accessible:         0.1999  (positive: accessible profs rated as harder?*)
+#   3. clear_grading:     -0.1681  (negative: clear grading = lower difficulty)
+#   4. caring:            -0.1502  (negative: caring = lower perceived difficulty)
+#   5. hilarious:         -0.1223  (negative: humor = lower perceived difficulty)
 #
 # *Note: The positive coefficient for "accessible" is surprising and may reflect
 # that accessible professors have more student interaction, making students more
@@ -245,7 +247,7 @@ print(f"Most strongly predictive tag (by |standardized beta|): {top['feature']}"
 # COLLINEARITY CONCERNS ADDRESSED:
 # ------------------------------------------------------------------------------
 # VIF computed for all 20 tag predictors:
-#   - Highest VIF: "respected" (3.66)
+#   - Highest VIF: "respected" (3.74)
 #   - All VIF values are below 5 (common threshold)
 #   - No problematic multicollinearity detected
 #
@@ -256,13 +258,13 @@ print(f"Most strongly predictive tag (by |standardized beta|): {top['feature']}"
 # COMPARISON WITH Q8 (Tags predicting Rating):
 # ------------------------------------------------------------------------------
 #                        Q8 (Rating)     Q9 (Difficulty)
-#   R^2:                 0.4264          0.3035
-#   RMSE:                0.6793          0.6534
+#   R^2:                 0.4945          0.4261
+#   RMSE:                0.6291          0.5831
 #
-# Tags are somewhat better at predicting ratings (43%) than difficulty (30%).
+# Tags predict ratings (49%) and difficulty (43%) with similar accuracy.
 # Interestingly, "tough_grader" is the top predictor for BOTH outcomes:
-#   - Q8: tough_grader -> lower ratings  (std beta = -0.37)
-#   - Q9: tough_grader -> higher difficulty (std beta = +0.45)
+#   - Q8: tough_grader -> lower ratings  (std beta = -0.40)
+#   - Q9: tough_grader -> higher difficulty (std beta = +0.47)
 #
 # This makes intuitive sense: tough grading leads to both higher perceived
 # difficulty and lower satisfaction ratings.

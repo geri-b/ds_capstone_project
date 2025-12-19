@@ -14,8 +14,10 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+SEED = 16784684
 
-def train_test_split_indices(n: int, test_size: float = 0.2, seed: int = 0):
+
+def train_test_split_indices(n: int, test_size: float = 0.2, seed: int = SEED):
     rng = np.random.default_rng(seed)
     idx = rng.permutation(n)
     n_test = int(round(n * test_size))
@@ -168,7 +170,7 @@ print("-" * 70)
 # -----------------------
 # Train/test split + Ridge fit
 # -----------------------
-train_idx, test_idx = train_test_split_indices(len(y), test_size=0.2, seed=0)
+train_idx, test_idx = train_test_split_indices(len(y), test_size=0.2, seed=SEED)
 X_train, X_test = X[train_idx], X[test_idx]
 y_train, y_test = y[train_idx], y[test_idx]
 
@@ -235,16 +237,16 @@ print("-" * 70)
 print("\n" + "=" * 70)
 print("COMPARISON WITH Q7 (Numeric Predictors Model)")
 print("=" * 70)
-print(f"Q7 (numeric predictors): R^2 = 0.8056, RMSE = 0.3577")
+print(f"Q7 (numeric predictors): R^2 = 0.8258, RMSE = 0.3494")
 print(f"Q8 (tags only):          R^2 = {r2:.4f}, RMSE = {test_rmse:.4f}")
 print("-" * 70)
 
-if r2 < 0.8056:
+if r2 < 0.8258:
     print("The tags-only model has LOWER R^2 than the numeric predictors model.")
-    print(f"Difference: {0.8056 - r2:.4f} lower R^2")
+    print(f"Difference: {0.8258 - r2:.4f} lower R^2")
 else:
     print("The tags-only model has HIGHER R^2 than the numeric predictors model.")
-    print(f"Difference: {r2 - 0.8056:.4f} higher R^2")
+    print(f"Difference: {r2 - 0.8258:.4f} higher R^2")
 
 # ==============================================================================
 # Q8 ANALYSIS AND ANSWER
@@ -257,20 +259,20 @@ else:
 # ------------------------------------------------------------------------------
 # MODEL RESULTS:
 # ------------------------------------------------------------------------------
-# - Test R^2:  0.4264  (model explains ~43% of variance in avg_rating)
-# - Test RMSE: 0.6793  (average prediction error of ~0.68 points on 1-5 scale)
+# - Test R^2:  0.4945  (model explains ~49% of variance in avg_rating)
+# - Test RMSE: 0.6291  (average prediction error of ~0.63 points on 1-5 scale)
 #
 # ------------------------------------------------------------------------------
 # MOST STRONGLY PREDICTIVE TAG:
 # ------------------------------------------------------------------------------
-# "tough_grader" is the most strongly predictive tag (std beta = -0.3741).
+# "tough_grader" is the most strongly predictive tag (std beta = -0.3990).
 #
 # Top 5 most predictive tags (by |standardized beta|):
-#   1. tough_grader:      -0.3741  (negative: tough graders get lower ratings)
-#   2. amazing_lectures:   0.2052  (positive: great lectures -> higher ratings)
-#   3. caring:             0.1635  (positive: caring professors rated higher)
-#   4. good_feedback:      0.1542  (positive: good feedback -> higher ratings)
-#   5. lecture_heavy:     -0.1464  (negative: lecture-heavy -> lower ratings)
+#   1. tough_grader:      -0.3990  (negative: tough graders get lower ratings)
+#   2. amazing_lectures:   0.2138  (positive: great lectures -> higher ratings)
+#   3. good_feedback:      0.1652  (positive: good feedback -> higher ratings)
+#   4. caring:             0.1616  (positive: caring professors rated higher)
+#   5. lecture_heavy:     -0.1497  (negative: lecture-heavy -> lower ratings)
 #
 # Interpretation: Being perceived as a "tough grader" is the strongest predictor
 # of lower ratings. Positive teaching qualities (amazing lectures, caring,
@@ -280,7 +282,7 @@ else:
 # COLLINEARITY CONCERNS ADDRESSED:
 # ------------------------------------------------------------------------------
 # VIF (Variance Inflation Factor) was computed for all 20 tag predictors:
-#   - Highest VIF: "respected" (3.66)
+#   - Highest VIF: "respected" (3.74)
 #   - All VIF values are below 5 (common threshold)
 #   - No problematic multicollinearity detected
 #
@@ -292,11 +294,11 @@ else:
 # COMPARISON WITH Q7:
 # ------------------------------------------------------------------------------
 #                        Q7 (Numeric)    Q8 (Tags)
-#   R^2:                 0.8056          0.4264
-#   RMSE:                0.3577          0.6793
+#   R^2:                 0.8258          0.4945
+#   RMSE:                0.3494          0.6291
 #
 # The tags-only model performs SIGNIFICANTLY WORSE than the numeric predictors
-# model (R^2 difference of 0.38, nearly double the RMSE).
+# model (R^2 difference of 0.33, nearly double the RMSE).
 #
 # Why the large difference?
 # 1. "would_take_again" in Q7 is essentially a direct satisfaction measure that

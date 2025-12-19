@@ -15,8 +15,10 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+SEED = 16784684
 
-def train_test_split_indices(n: int, test_size: float = 0.2, seed: int = 0):
+
+def train_test_split_indices(n: int, test_size: float = 0.2, seed: int = SEED):
     rng = np.random.default_rng(seed)
     idx = rng.permutation(n)
     n_test = int(round(n * test_size))
@@ -152,7 +154,7 @@ print("-" * 70)
 # -----------------------
 # Train/test split + OLS fit
 # -----------------------
-train_idx, test_idx = train_test_split_indices(len(y), test_size=0.2, seed=0)
+train_idx, test_idx = train_test_split_indices(len(y), test_size=0.2, seed=SEED)
 X_train, X_test = X[train_idx], X[test_idx]
 y_train, y_test = y[train_idx], y[test_idx]
 
@@ -214,8 +216,8 @@ print(f"Most strongly predictive factor (by |standardized beta|): {top['feature'
 # ------------------------------------------------------------------------------
 # MODEL RESULTS:
 # ------------------------------------------------------------------------------
-# - Test R²:  0.8056  (model explains ~81% of variance in avg_rating)
-# - Test RMSE: 0.3577 (average prediction error of ~0.36 points on 1-5 scale)
+# - Test R²:  0.8258  (model explains ~83% of variance in avg_rating)
+# - Test RMSE: 0.3494 (average prediction error of ~0.35 points on 1-5 scale)
 #
 # ------------------------------------------------------------------------------
 # MOST STRONGLY PREDICTIVE FACTOR:
@@ -223,12 +225,12 @@ print(f"Most strongly predictive factor (by |standardized beta|): {top['feature'
 # "would_take_again" is the most strongly predictive factor.
 #
 # Standardized coefficients (by magnitude):
-#   1. would_take_again:  0.7144  (strongest positive predictor)
-#   2. avg_difficulty:   -0.2031  (negative: harder classes → lower ratings)
-#   3. pepper:            0.1160  (positive: "hot" professors rated higher)
-#   4. male_prof:         0.0190  (negligible effect)
-#   5. num_ratings:       0.0092  (negligible effect)
-#   6. num_online:        0.0035  (negligible effect)
+#   1. would_take_again:  0.7090  (strongest positive predictor)
+#   2. avg_difficulty:   -0.2033  (negative: harder classes → lower ratings)
+#   3. pepper:            0.1222  (positive: "hot" professors rated higher)
+#   4. male_prof:         0.0120  (negligible effect)
+#   5. num_online:        0.0037  (negligible effect)
+#   6. num_ratings:       0.0008  (negligible effect)
 #
 # Interpretation: Professors whose students say they "would take the class again"
 # tend to have much higher ratings. Difficulty has a moderate negative effect.
@@ -241,12 +243,12 @@ print(f"Most strongly predictive factor (by |standardized beta|): {top['feature'
 #    (female = 1 - male). We keep only "male_prof" as a single gender indicator.
 #
 # 2. VIF (Variance Inflation Factor) was computed for all predictors:
-#      - would_take_again: 1.67
+#      - would_take_again: 1.66
 #      - avg_difficulty:   1.42
 #      - pepper:           1.27
 #      - num_ratings:      1.02
-#      - num_online:       1.02
-#      - male_prof:        1.01
+#      - male_prof:        1.02
+#      - num_online:       1.01
 #
 #    All VIF values are well below 5 (common threshold), indicating no
 #    problematic multicollinearity remains after dropping the redundant
