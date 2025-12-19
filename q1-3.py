@@ -4,6 +4,7 @@
 import numpy as np
 import pandas as pd
 from scipy.stats import levene, ttest_ind, mannwhitneyu
+SEED = 16784684
 
 # -----------------------
 # Load + label columns
@@ -43,7 +44,7 @@ print("------------------------")
 # -----------------------
 # Bootstrap CI helper (percentile bootstrap)
 # -----------------------
-def bootstrap_ci(stat_fn, m, f, B=5000, alpha=0.05, seed=0):
+def bootstrap_ci(stat_fn, m, f, B=5000, alpha=0.05, seed=SEED):
     rng = np.random.default_rng(seed)
     m = np.asarray(m); f = np.asarray(f)
     n1, n2 = m.size, f.size
@@ -61,7 +62,7 @@ def bootstrap_ci(stat_fn, m, f, B=5000, alpha=0.05, seed=0):
 # -----------------------
 # Tests + bootstrap CIs
 # -----------------------
-def run_tests_with_bootstrap(data, outcome="avg_rating", B=5000, seed=0):
+def run_tests_with_bootstrap(data, outcome="avg_rating", B=5000, seed=SEED):
     m = data.loc[data["male_prof"] == 1, outcome].dropna().to_numpy()
     f = data.loc[data["male_prof"] == 0, outcome].dropna().to_numpy()
 
@@ -101,7 +102,7 @@ def run_tests_with_bootstrap(data, outcome="avg_rating", B=5000, seed=0):
 # -----------------------
 # Run (filtered dataset)
 # -----------------------
-male_arr, female_arr = run_tests_with_bootstrap(df10, outcome="avg_rating", B=5000, seed=0)
+male_arr, female_arr = run_tests_with_bootstrap(df10, outcome="avg_rating", B=5000, seed=SEED)
 
 # -----------------------
 # Cohen's d (raw) using df10 (10+ ratings)

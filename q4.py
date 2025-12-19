@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import chi2_contingency
 import matplotlib.pyplot as plt
+SEED = 16784684
 
 # -----------------------
 # Load + label columns
